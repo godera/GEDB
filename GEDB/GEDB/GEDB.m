@@ -13,7 +13,7 @@
 #import "FMDB.h"
 #import "NSString+GodEraAdd.h"
 
-#define TABLE_NAME_PREFIX @"Table_"
+#define TABLE_NAME_PREFIX @"table_"
 
 @implementation GEDB
 
@@ -33,7 +33,7 @@
         
         NSString *propertyAttribute = [NSString stringWithCString:property_getAttributes(properties[i]) encoding:NSUTF8StringEncoding];
         
-        GEDBLog(@"%@",propertyAttribute);
+//        NSLog(@"%@",propertyAttribute);
         
         NSString* dataType = nil;
         if ([propertyAttribute containsString:@"NSString"]) {
@@ -73,6 +73,7 @@
         return NO;
     }
 }
+
 
 + (BOOL)insertEntity:(id)entity
 {
@@ -117,6 +118,7 @@
         return NO;
     }
 }
+
 
 + (BOOL)deleteEntity:(id)entity
 {
@@ -164,67 +166,6 @@
     }
 }
 
-+ (NSArray*)queryEntity:(id)conditionEntity
-{
-    NSString* tableName = [self tableNameFromEntityClass:[conditionEntity class]];
-
-    //where
-    unsigned int count;
-    objc_property_t *properties = class_copyPropertyList([conditionEntity class], &count);
-    
-    NSMutableString *sqlcmd = [NSMutableString stringWithFormat:@"SELECT * FROM %@ WHERE ",tableName];
-    
-    for(int i = 0 ; i < count ; i++){
-        NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
-        
-        id value = [conditionEntity valueForKey:propertyName];
-        if (value && ![value isMemberOfClass:[NSNull class]]) {
-            [sqlcmd appendFormat:@"%@ = '%@' AND ",propertyName,value];
-        }
-    }
-    
-    [sqlcmd deleteCharactersInRange:NSMakeRange(sqlcmd.length - 5, 5)];//刪除最後一個" AND "
-    [sqlcmd appendString:@";"];
-    
-    
-    GEDBLog(@"%@",sqlcmd);
-    
-    FMDatabase *db = [self database];
-    
-    BOOL opened = [db open];
-    if (opened == NO) {
-        NSLog(@"Could not open db.");
-        return nil;
-    }
-    
-    FMResultSet* resultSet = [db executeQuery:sqlcmd];
-    
-    NSMutableArray *resultArray = [NSMutableArray array];
-    
-    while ([resultSet next]) {
-        @autoreleasepool {
-            id anEntity = [[conditionEntity class] new];
-            
-            for(int i = 0 ; i < count ; i++){
-                NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
-                
-                id value = [resultSet objectForColumnName:propertyName];
-
-                if (value && ![value isMemberOfClass:[NSNull class]]) {
-                    [anEntity setValue:value forKey:propertyName];
-                }
-            }
-            
-            [resultArray addObject:anEntity];
-        }
-    }
-
-    free(properties);
-
-    [db close];
-
-    return resultArray;
-}
 
 + (BOOL)updateEntity:(id)fromEntity toEntity:(id)toEntity
 {
@@ -293,6 +234,76 @@
 
 }
 
+
++ (NSArray*)queryEntity:(id)conditionEntity
+{
+    NSString* tableName = [self tableNameFromEntityClass:[conditionEntity class]];
+    
+    //where
+    NSMutableString *sqlcmd = [NSMutableString stringWithFormat:@"SELECT * FROM %@ WHERE ",tableName];
+    
+    unsigned int count;
+    objc_property_t *properties = class_copyPropertyList([conditionEntity class], &count);
+    
+    
+    for(int i = 0 ; i < count ; i++){
+        NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
+        
+        id value = [conditionEntity valueForKey:propertyName];
+        if (value && ![value isMemberOfClass:[NSNull class]]) {
+            [sqlcmd appendFormat:@"%@ = '%@' AND ",propertyName,value];
+        }
+    }
+    NSInteger uselessLength = 0;
+    if ([sqlcmd containsString:@"AND"]) {
+        uselessLength = 5;
+    }else{
+        uselessLength = 7;
+    }
+    [sqlcmd deleteCharactersInRange:NSMakeRange(sqlcmd.length - uselessLength, uselessLength)];//刪除最後一個" AND "或" WHERE "
+    [sqlcmd appendString:@";"];
+    
+    
+    GEDBLog(@"%@",sqlcmd);
+    
+    FMDatabase *db = [self database];
+    
+    BOOL opened = [db open];
+    if (opened == NO) {
+        NSLog(@"Could not open db.");
+        return nil;
+    }
+    
+    FMResultSet* resultSet = [db executeQuery:sqlcmd];
+    
+    NSMutableArray *resultArray = [NSMutableArray array];
+    
+    while ([resultSet next]) {
+        @autoreleasepool {
+            id anEntity = [[conditionEntity class] new];
+            
+            for(int i = 0 ; i < count ; i++){
+                NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
+                
+                id value = [resultSet objectForColumnName:propertyName];
+                
+                if (value && ![value isMemberOfClass:[NSNull class]]) {
+                    [anEntity setValue:value forKey:propertyName];
+                }
+            }
+            
+            [resultArray addObject:anEntity];
+        }
+    }
+    
+    free(properties);
+    
+    [db close];
+    
+    return resultArray;
+}
+
+/////////////////////////////////////////////////////////////
 +(NSString*)pathInDocumentWithFileName:(NSString*)fileName
 {
     NSArray* path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -306,6 +317,7 @@
 
 +(FMDatabase*)database{
     NSString *dbPath = [self pathInDocumentWithFileName:DB_NAME];
+//    NSLog(@"%@",dbPath);
     FMDatabase* db = [FMDatabase databaseWithPath:dbPath];
     return db;
 }
