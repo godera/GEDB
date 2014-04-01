@@ -11,7 +11,7 @@
 #define DB_NAME @"DB.sqlite3"
 
 #ifdef DEBUG
-//本请求类打印语句的开关信息，设为0即关
+//本类打印语句的开关信息，设为0即关
 #define DEBUG_GEDB 1
 #else
 #define DEBUG_GEDB 0
