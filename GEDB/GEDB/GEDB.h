@@ -25,7 +25,7 @@
 
 #import <Foundation/Foundation.h>
 /**
- *@brief SQLite的建表和增刪改查的面向對象的封裝;實體的屬性只能是NSString、NSNumber、UIImage三種類型,不建議在實體里有UIImage對象
+ *@brief SQLite的建表和增刪改查的面向對象的封裝;實體的屬性只能是NSString、NSNumber、UIImage、NSData四種類型,不建議在實體里有UIImage對象
  *@undone 事務操作尚未加上，批量增刪改耗時較多
  */
 @interface GEDB : NSObject

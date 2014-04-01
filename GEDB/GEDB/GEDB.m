@@ -41,12 +41,12 @@
         }else if ([propertyAttribute containsString:@"NSNumber"] /*|| [propertyAttribute containsString:@"Tf"] || [propertyAttribute containsString:@"Td"]*/){
             dataType = @"REAL";
         }/*else if ([propertyAttribute containsString:@"Ti"]){
-            dataType = @"INTEGER";
-        }*/else if ([propertyAttribute containsString:@"UIImage"]){
-            dataType = @"BLOB";
-        }else{
-            dataType= @"NULL";
-        }
+          dataType = @"INTEGER";
+          }*/else if ([propertyAttribute containsString:@"UIImage"] || [propertyAttribute containsString:@"NSData"]){
+              dataType = @"BLOB";
+          }else{
+              dataType= @"NULL";
+          }
         
         [sqlcmd appendFormat:@" %@",dataType];
 

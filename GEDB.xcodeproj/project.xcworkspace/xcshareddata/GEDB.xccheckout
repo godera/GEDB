@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FF0926A7-CBE2-4EC5-835C-4A06060E3DD8</string>
+	<key>IDESourceControlProjectName</key>
+	<string>GEDB</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>B00E5E3D-F8E3-492A-AC5D-052BE9EBE23C</key>
+		<string>https://github.com/godera/GEDB.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>GEDB.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>B00E5E3D-F8E3-492A-AC5D-052BE9EBE23C</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/godera/GEDB.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>B00E5E3D-F8E3-492A-AC5D-052BE9EBE23C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B00E5E3D-F8E3-492A-AC5D-052BE9EBE23C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>GEDB</string>
+		</dict>
+	</array>
+</dict>
+</plist>
