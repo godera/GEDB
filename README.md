@@ -52,6 +52,7 @@ GEDB
 @end
 
 用法示例：
+
     [GEDB createTableIfNotExistsViaEntityClass:[SQLEntity class]];
     NSLog(@"original db：%@",[GEDB queryEntity:[SQLEntity new]]);
     
