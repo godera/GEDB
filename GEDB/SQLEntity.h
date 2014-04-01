@@ -13,6 +13,6 @@
 @property (nonatomic, copy) NSString* name;
 @property (nonatomic, strong) NSNumber* ID;
 @property (nonatomic, strong) NSNumber* age;
-@property (nonatomic, strong) UIImage *icon;
+@property (nonatomic, strong) NSData *icon;
 
 @end

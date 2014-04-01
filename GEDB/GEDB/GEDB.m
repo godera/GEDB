@@ -42,7 +42,7 @@
             dataType = @"REAL";
         }/*else if ([propertyAttribute containsString:@"Ti"]){
           dataType = @"INTEGER";
-          }*/else if ([propertyAttribute containsString:@"UIImage"] || [propertyAttribute containsString:@"NSData"]){
+          }*/else if ([propertyAttribute containsString:@"NSData"]){
               dataType = @"BLOB";
           }else{
               dataType= @"NULL";
