@@ -20,12 +20,11 @@
 +(BOOL)createTableIfNotExistsViaEntityClass:(Class)entityClass{
     
     NSString* tableName = [self tableNameFromEntityClass:entityClass];
-    
-    unsigned int count;
-    objc_property_t *properties = class_copyPropertyList(entityClass, &count);
 
     NSMutableString *sqlcmd = [NSMutableString stringWithFormat:@"CREATE TABLE  IF NOT EXISTS %@(_id INTEGER  PRIMARY KEY  AUTOINCREMENT  NOT NULL",tableName];
     
+    unsigned int count;
+    objc_property_t *properties = class_copyPropertyList(entityClass, &count);
     for(int i = 0 ; i < count ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
         
@@ -79,12 +78,11 @@
 {
     NSString* tableName = [self tableNameFromEntityClass:[entity class]];
     
-    unsigned int count;
-    objc_property_t *properties = class_copyPropertyList([entity class], &count);
-    
     NSMutableArray *columns = [NSMutableArray array];
     NSMutableString* values = [NSMutableString string];
 
+    unsigned int count;
+    objc_property_t *properties = class_copyPropertyList([entity class], &count);
     for(int i = 0 ; i < count ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
         id value = [entity valueForKey:propertyName];
@@ -125,13 +123,10 @@
     NSString* tableName = [self tableNameFromEntityClass:[entity class]];
     
     //where
-    unsigned int count;
-    objc_property_t *properties = class_copyPropertyList([entity class], &count);
-    
-    
     NSMutableString *sqlcmd = [NSMutableString stringWithFormat:@"DELETE FROM %@ WHERE ",tableName];
     
-    
+    unsigned int count;
+    objc_property_t *properties = class_copyPropertyList([entity class], &count);
     for(int i = 0 ; i < count ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
         
@@ -171,14 +166,12 @@
 {
     NSString* tableName = [self tableNameFromEntityClass:[fromEntity class]];
 
-    
     //from-where
-    unsigned int count;
-    objc_property_t *propertiesFrom = class_copyPropertyList([fromEntity class], &count);
-    
     NSMutableString *wheres = [NSMutableString string];
     
-    for(int i = 0 ; i < count ; i++){
+    unsigned int countFrom;
+    objc_property_t *propertiesFrom = class_copyPropertyList([fromEntity class], &countFrom);
+    for(int i = 0 ; i < countFrom ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(propertiesFrom[i]) encoding:NSUTF8StringEncoding];
         
         id value = [fromEntity valueForKey:propertyName];
@@ -186,7 +179,6 @@
         if (value && ![value isMemberOfClass:[NSNull class]]) {
             [wheres appendFormat:@"%@ = '%@' AND ", propertyName, value];
         }
-        
     }
     free(propertiesFrom);
     
@@ -194,11 +186,10 @@
     
     
     //to-set
-    unsigned int countTo;
-    objc_property_t *propertiesTo = class_copyPropertyList([toEntity class], &countTo);
-    
     NSMutableString *settings = [NSMutableString string];
     
+    unsigned int countTo;
+    objc_property_t *propertiesTo = class_copyPropertyList([toEntity class], &countTo);
     for(int i = 0 ; i < countTo ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(propertiesTo[i]) encoding:NSUTF8StringEncoding];
         id value = [toEntity valueForKey:propertyName];
@@ -244,8 +235,6 @@
     
     unsigned int count;
     objc_property_t *properties = class_copyPropertyList([conditionEntity class], &count);
-    
-    
     for(int i = 0 ; i < count ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
         
