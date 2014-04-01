@@ -48,3 +48,38 @@ GEDB
  */
 
 + (NSArray*)queryEntity:(id)entity;
+
+@end
+
+用法示例：
+    [GEDB createTableIfNotExistsViaEntityClass:[SQLEntity class]];
+    NSLog(@"original db：%@",[GEDB queryEntity:[SQLEntity new]]);
+    
+    SQLEntity* insertEntity = [SQLEntity new];
+    insertEntity.name = @"teacher1";
+    insertEntity.age = @100;
+    insertEntity.ID = @1;
+    [GEDB insertEntity:insertEntity];
+    SQLEntity* insertEntity2= [SQLEntity new];
+    insertEntity2.name = @"student1";
+    insertEntity2.ID = @2;
+    [GEDB insertEntity:insertEntity2];
+    NSLog(@"db after insertion：%@",[GEDB queryEntity:[SQLEntity new]]);
+    
+
+    SQLEntity* fromEntity = [SQLEntity new];
+    fromEntity.name = @"teacher1";
+    SQLEntity* toEntity = [SQLEntity new];
+    toEntity.name = @"Li Jingcheng";
+    toEntity.age = @28;
+    [GEDB updateEntity:fromEntity toEntity:toEntity];
+    NSLog(@"db after updating：%@",[GEDB queryEntity:[SQLEntity new]]);
+
+    SQLEntity* deleteEntity = [SQLEntity new];
+    deleteEntity.ID = @2;
+    [GEDB deleteEntity:deleteEntity];
+    NSLog(@"db after deletion：%@",[GEDB queryEntity:[SQLEntity new]]);
+    
+    SQLEntity* queryEntity= [SQLEntity new];
+    queryEntity.name = @"Li Jingcheng";
+    NSLog(@"info about 'Li Jingcheng'：%@",[GEDB queryEntity:queryEntity]);
