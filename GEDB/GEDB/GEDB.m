@@ -33,6 +33,17 @@
         NSString *propertyAttribute = [NSString stringWithCString:property_getAttributes(properties[i]) encoding:NSUTF8StringEncoding];
         
 //        NSLog(@"%@",propertyAttribute);
+        /*
+        if ([propertyAttribute containsString:@"@"]) {//說明是個對象
+            if ([propertyAttribute containsString:@"T@\"NS"]) {//說明是個系統對象
+                NSLog(@"系統對象");
+            }else{//用戶對象
+                NSLog(@"用戶對象");
+            }
+        }else{//非對象
+            NSLog(@"非對象");
+        }
+         */
         
         NSString* dataType = nil;
         if ([propertyAttribute containsString:@"NSString"]) {
