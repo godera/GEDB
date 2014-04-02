@@ -33,33 +33,37 @@
 /**
  *@brief 通過實體類來建表，表名包含實體類名，表單會默認建一個_id,其他字段都是以屬性名來命名
  *@param entityClass-實體類
- *@return 建表成功與否
+ *@return 操作成功與否
  */
 +(BOOL)createTableIfNotExistsViaEntityClass:(Class)entityClass;
+
 /**
  *@brief 插入一個實體
  *@param entity-要插入的實體，含有結果值的實體，設置用
- *@return 插入實體成功與否
+ *@return 操作成功與否
  */
-+ (BOOL)insertEntity:(id)entity;
++ (BOOL)insert:(id)entity;
+
 /**
- *@brief 刪除一個實體
- *@param entity-要刪除的實體，條件實體，查詢用
- *@return 刪除數據成功與否
+ *@brief 刪除符合條件的實體
+ *@param whereEntity-要刪除的實體，條件實體，查詢用
+ *@return 操作成功與否
  */
-+ (BOOL)deleteEntity:(id)entity;
++ (BOOL)deleteWhere:(id)whereEntity;
+
 /**
  *@brief 改變表中的實體
- *@param fromEntity-條件實體，查詢用
- *       toEntity-含有結果值的實體，設置用
- *@return 改變實體成功與否
+ *@param whereEntity-條件實體，查詢用
+ *       setEntity-含有結果值的實體，設置用
+ *@return 操作成功與否
  */
-+ (BOOL)updateEntity:(id)fromEntity toEntity:(id)toEntity;
++ (BOOL)updateWhere:(id)whereEntity set:(id)setEntity;
+
 /**
  *@brief 查詢符合條件的實體
- *@param entity-條件實體，查詢用
- *@return 查詢回來的實體數組
+ *@param whereEntity-條件實體，查詢用
+ *@return 查詢回來的實體數組，數組項跟whereEntity一個Class
  */
-+ (NSArray*)queryEntity:(id)entity;
++ (NSArray*)selectWhere:(id)whereEntity;
 
 @end

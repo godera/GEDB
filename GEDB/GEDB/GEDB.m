@@ -15,6 +15,12 @@
 
 #define TABLE_NAME_PREFIX @"table_"
 
+@interface GEDB ()
+
+
+@end
+
+
 @implementation GEDB
 
 +(BOOL)createTableIfNotExistsViaEntityClass:(Class)entityClass{
@@ -85,7 +91,7 @@
 }
 
 
-+ (BOOL)insertEntity:(id)entity
++ (BOOL)insert:(id)entity
 {
     NSString* tableName = [self tableNameFromEntityClass:[entity class]];
     
@@ -129,19 +135,19 @@
 }
 
 
-+ (BOOL)deleteEntity:(id)entity
++ (BOOL)deleteWhere:(id)whereEntity
 {
-    NSString* tableName = [self tableNameFromEntityClass:[entity class]];
+    NSString* tableName = [self tableNameFromEntityClass:[whereEntity class]];
     
     //where
     NSMutableString *sqlcmd = [NSMutableString stringWithFormat:@"DELETE FROM %@ WHERE ",tableName];
     
     unsigned int count;
-    objc_property_t *properties = class_copyPropertyList([entity class], &count);
+    objc_property_t *properties = class_copyPropertyList([whereEntity class], &count);
     for(int i = 0 ; i < count ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
         
-        id value = [entity valueForKey:propertyName];
+        id value = [whereEntity valueForKey:propertyName];
         if (value && ![value isMemberOfClass:[NSNull class]]) {
             [sqlcmd appendFormat:@"%@ = '%@' AND ",propertyName,value];
         }
@@ -173,19 +179,19 @@
 }
 
 
-+ (BOOL)updateEntity:(id)fromEntity toEntity:(id)toEntity
++ (BOOL)updateWhere:(id)whereEntity set:(id)setEntity
 {
-    NSString* tableName = [self tableNameFromEntityClass:[fromEntity class]];
+    NSString* tableName = [self tableNameFromEntityClass:[whereEntity class]];
 
     //from-where
     NSMutableString *wheres = [NSMutableString string];
     
     unsigned int countFrom;
-    objc_property_t *propertiesFrom = class_copyPropertyList([fromEntity class], &countFrom);
+    objc_property_t *propertiesFrom = class_copyPropertyList([whereEntity class], &countFrom);
     for(int i = 0 ; i < countFrom ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(propertiesFrom[i]) encoding:NSUTF8StringEncoding];
         
-        id value = [fromEntity valueForKey:propertyName];
+        id value = [whereEntity valueForKey:propertyName];
         
         if (value && ![value isMemberOfClass:[NSNull class]]) {
             [wheres appendFormat:@"%@ = '%@' AND ", propertyName, value];
@@ -200,10 +206,10 @@
     NSMutableString *settings = [NSMutableString string];
     
     unsigned int countTo;
-    objc_property_t *propertiesTo = class_copyPropertyList([toEntity class], &countTo);
+    objc_property_t *propertiesTo = class_copyPropertyList([setEntity class], &countTo);
     for(int i = 0 ; i < countTo ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(propertiesTo[i]) encoding:NSUTF8StringEncoding];
-        id value = [toEntity valueForKey:propertyName];
+        id value = [setEntity valueForKey:propertyName];
         if (value && ![value isMemberOfClass:[NSNull class]]) {
             [settings appendFormat:@"%@ = '%@',", propertyName, value];
         }
@@ -237,19 +243,19 @@
 }
 
 
-+ (NSArray*)queryEntity:(id)conditionEntity
++ (NSArray*)selectWhere:(id)whereEntity
 {
-    NSString* tableName = [self tableNameFromEntityClass:[conditionEntity class]];
+    NSString* tableName = [self tableNameFromEntityClass:[whereEntity class]];
     
     //where
     NSMutableString *sqlcmd = [NSMutableString stringWithFormat:@"SELECT * FROM %@ WHERE ",tableName];
     
     unsigned int count;
-    objc_property_t *properties = class_copyPropertyList([conditionEntity class], &count);
+    objc_property_t *properties = class_copyPropertyList([whereEntity class], &count);
     for(int i = 0 ; i < count ; i++){
         NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];
         
-        id value = [conditionEntity valueForKey:propertyName];
+        id value = [whereEntity valueForKey:propertyName];
         if (value && ![value isMemberOfClass:[NSNull class]]) {
             [sqlcmd appendFormat:@"%@ = '%@' AND ",propertyName,value];
         }
@@ -280,7 +286,7 @@
     
     while ([resultSet next]) {
         @autoreleasepool {
-            id anEntity = [[conditionEntity class] new];
+            id anEntity = [[whereEntity class] new];
             
             for(int i = 0 ; i < count ; i++){
                 NSString *propertyName = [NSString stringWithCString:property_getName(properties[i]) encoding:NSUTF8StringEncoding];

@@ -18,36 +18,36 @@
     // Override point for customization after application launch.
     
     [GEDB createTableIfNotExistsViaEntityClass:[SQLEntity class]];
-    NSLog(@"original db：%@",[GEDB queryEntity:[SQLEntity new]]);
+    NSLog(@"original db：%@",[GEDB selectWhere:[SQLEntity new]]);
     
     SQLEntity* insertEntity = [SQLEntity new];
     insertEntity.name = @"teacher1";
     insertEntity.age = @100;
     insertEntity.ID = @1;
-    [GEDB insertEntity:insertEntity];
+    [GEDB insert:insertEntity];
     SQLEntity* insertEntity2= [SQLEntity new];
     insertEntity2.name = @"student1";
     insertEntity2.ID = @2;
-    [GEDB insertEntity:insertEntity2];
-    NSLog(@"db after insertion：%@",[GEDB queryEntity:[SQLEntity new]]);
+    [GEDB insert:insertEntity2];
+    NSLog(@"db after insertion：%@",[GEDB selectWhere:[SQLEntity new]]);
     
 
-    SQLEntity* fromEntity = [SQLEntity new];
-    fromEntity.name = @"teacher1";
-    SQLEntity* toEntity = [SQLEntity new];
-    toEntity.name = @"Li Jingcheng";
-    toEntity.age = @28;
-    [GEDB updateEntity:fromEntity toEntity:toEntity];
-    NSLog(@"db after updating：%@",[GEDB queryEntity:[SQLEntity new]]);
+    SQLEntity* whereEntity = [SQLEntity new];
+    whereEntity.name = @"teacher1";
+    SQLEntity* setEntity = [SQLEntity new];
+    setEntity.name = @"Li Jingcheng";
+    setEntity.age = @28;
+    [GEDB updateWhere:whereEntity set:setEntity];
+    NSLog(@"db after updating：%@",[GEDB selectWhere:[SQLEntity new]]);
 
-    SQLEntity* deleteEntity = [SQLEntity new];
-    deleteEntity.ID = @2;
-    [GEDB deleteEntity:deleteEntity];
-    NSLog(@"db after deletion：%@",[GEDB queryEntity:[SQLEntity new]]);
+    SQLEntity* whereEntityDel = [SQLEntity new];
+    whereEntityDel.ID = @2;
+    [GEDB deleteWhere:whereEntityDel];
+    NSLog(@"db after deletion：%@",[GEDB selectWhere:[SQLEntity new]]);
     
-    SQLEntity* queryEntity= [SQLEntity new];
-    queryEntity.name = @"Li Jingcheng";
-    NSLog(@"info about 'Li Jingcheng'：%@",[GEDB queryEntity:queryEntity]);
+    SQLEntity* whereEntitySel= [SQLEntity new];
+    whereEntitySel.name = @"Li Jingcheng";
+    NSLog(@"info about 'Li Jingcheng'：%@",[GEDB selectWhere:whereEntitySel]);
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
