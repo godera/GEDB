@@ -12,7 +12,7 @@
 
 #ifdef DEBUG
 //本类打印语句的开关信息，设为0即关
-#define DEBUG_GEDB 1
+#define DEBUG_GEDB 0
 #else
 #define DEBUG_GEDB 0
 #endif

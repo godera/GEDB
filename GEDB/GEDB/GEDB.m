@@ -110,7 +110,9 @@
     }
     free(properties);
     
-    [values deleteCharactersInRange:NSMakeRange(values.length - 1, 1)];
+    if (values.length >= 1) {
+        [values deleteCharactersInRange:NSMakeRange(values.length - 1, 1)];
+    }
     
     NSMutableString *sqlcmd = [NSMutableString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@);", tableName, [columns componentsJoinedByString:@","], values];
     
@@ -154,7 +156,9 @@
     }
     free(properties);
     
-    [sqlcmd deleteCharactersInRange:NSMakeRange(sqlcmd.length - 5, 5)];//刪除最後一個" AND "
+    if (sqlcmd.length >= 5) {
+        [sqlcmd deleteCharactersInRange:NSMakeRange(sqlcmd.length - 5, 5)];//刪除最後一個" AND "
+    }
     [sqlcmd appendString:@";"];
 
     GEDBLog(@"%@",sqlcmd);
@@ -199,7 +203,9 @@
     }
     free(propertiesFrom);
     
-    [wheres deleteCharactersInRange:NSMakeRange(wheres.length - 5, 5)];//刪除最後一個" AND "
+    if (wheres.length >= 5) {
+        [wheres deleteCharactersInRange:NSMakeRange(wheres.length - 5, 5)];//刪除最後一個" AND "
+    }
     
     
     //to-set
@@ -214,7 +220,9 @@
             [settings appendFormat:@"%@ = '%@',", propertyName, value];
         }
     }
-    [settings deleteCharactersInRange:NSMakeRange(settings.length - 1, 1)];//刪除最後一個","
+    if (settings.length >= 1) {
+        [settings deleteCharactersInRange:NSMakeRange(settings.length - 1, 1)];//刪除最後一個","
+    }
 
     free(propertiesTo);
     
@@ -266,7 +274,9 @@
     }else{
         uselessLength = 7;
     }
-    [sqlcmd deleteCharactersInRange:NSMakeRange(sqlcmd.length - uselessLength, uselessLength)];//刪除最後一個" AND "或" WHERE "
+    if (sqlcmd.length >= uselessLength) {
+        [sqlcmd deleteCharactersInRange:NSMakeRange(sqlcmd.length - uselessLength, uselessLength)];//刪除最後一個" AND "或" WHERE "
+    }
     [sqlcmd appendString:@";"];
     
     
